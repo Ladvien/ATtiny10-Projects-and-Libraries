@@ -11,3 +11,5 @@ of a signle ATtiny10.
 Anyway, this project set includes projects and libraries dealing with the ATtiny10.
 
 ...damn you Microchip....
+
+![](http://ladvien.com/sites/default/files/Hui3O.jpg?s146857d1486828390)
