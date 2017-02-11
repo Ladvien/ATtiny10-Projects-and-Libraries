@@ -1,0 +1,259 @@
+
+ATtiny_button_debounce.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         00000134  00000000  00000000  00000074  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         00000000  00800040  00800040  000001a8  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .bss          00000003  00800040  00800040  000001a8  2**0
+                  ALLOC
+  3 .comment      00000030  00000000  00000000  000001a8  2**0
+                  CONTENTS, READONLY
+  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  000001d8  2**2
+                  CONTENTS, READONLY
+  5 .debug_aranges 00000028  00000000  00000000  00000214  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_info   0000047f  00000000  00000000  0000023c  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_abbrev 000003a1  00000000  00000000  000006bb  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_line   00000219  00000000  00000000  00000a5c  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_frame  00000050  00000000  00000000  00000c78  2**2
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_str    0000036a  00000000  00000000  00000cc8  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_loc    0000018d  00000000  00000000  00001032  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 12 .debug_ranges 00000018  00000000  00000000  000011bf  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0a c0       	rjmp	.+20     	; 0x16 <__ctors_end>
+   2:	19 c0       	rjmp	.+50     	; 0x36 <__bad_interrupt>
+   4:	18 c0       	rjmp	.+48     	; 0x36 <__bad_interrupt>
+   6:	17 c0       	rjmp	.+46     	; 0x36 <__bad_interrupt>
+   8:	16 c0       	rjmp	.+44     	; 0x36 <__bad_interrupt>
+   a:	15 c0       	rjmp	.+42     	; 0x36 <__bad_interrupt>
+   c:	14 c0       	rjmp	.+40     	; 0x36 <__bad_interrupt>
+   e:	13 c0       	rjmp	.+38     	; 0x36 <__bad_interrupt>
+  10:	12 c0       	rjmp	.+36     	; 0x36 <__bad_interrupt>
+  12:	11 c0       	rjmp	.+34     	; 0x36 <__bad_interrupt>
+  14:	10 c0       	rjmp	.+32     	; 0x36 <__bad_interrupt>
+
+00000016 <__ctors_end>:
+  16:	11 27       	eor	r17, r17
+  18:	1f bf       	out	0x3f, r17	; 63
+  1a:	cf e5       	ldi	r28, 0x5F	; 95
+  1c:	d0 e0       	ldi	r29, 0x00	; 0
+  1e:	de bf       	out	0x3e, r29	; 62
+  20:	cd bf       	out	0x3d, r28	; 61
+
+00000022 <__do_clear_bss>:
+  22:	20 e0       	ldi	r18, 0x00	; 0
+  24:	a0 e4       	ldi	r26, 0x40	; 64
+  26:	b0 e0       	ldi	r27, 0x00	; 0
+  28:	01 c0       	rjmp	.+2      	; 0x2c <.do_clear_bss_start>
+
+0000002a <.do_clear_bss_loop>:
+  2a:	1d 93       	st	X+, r17
+
+0000002c <.do_clear_bss_start>:
+  2c:	a3 34       	cpi	r26, 0x43	; 67
+  2e:	b2 07       	cpc	r27, r18
+  30:	e1 f7       	brne	.-8      	; 0x2a <.do_clear_bss_loop>
+  32:	6c d0       	rcall	.+216    	; 0x10c <main>
+  34:	7d c0       	rjmp	.+250    	; 0x130 <_exit>
+
+00000036 <__bad_interrupt>:
+  36:	e4 cf       	rjmp	.-56     	; 0x0 <__vectors>
+
+00000038 <_Z13ButtonPressedhhhhh>:
+char Pressed[numberOfButtons];
+uint8_t Pressed_Confidence_Level[numberOfButtons]; //Measure button press cofidence
+uint8_t Released_Confidence_Level[numberOfButtons]; //Measure button release confidence
+
+char ButtonPressed(uint8_t buttonNumber, unsigned char pinOfButton, unsigned char portBit, uint8_t pressConfidenceLevel, uint8_t releaseConfidenceLevel)
+{
+  38:	cf 93       	push	r28
+  3a:	df 93       	push	r29
+  3c:	1f 93       	push	r17
+  3e:	cd b7       	in	r28, 0x3d	; 61
+  40:	de b7       	in	r29, 0x3e	; 62
+  42:	cf 5f       	subi	r28, 0xFF	; 255
+  44:	df 4f       	sbci	r29, 0xFF	; 255
+  46:	68 83       	st	Y, r22
+  48:	c1 50       	subi	r28, 0x01	; 1
+  4a:	d0 40       	sbci	r29, 0x00	; 0
+	if (bit_is_clear(pinOfButton, portBit))
+  4c:	cf 5f       	subi	r28, 0xFF	; 255
+  4e:	df 4f       	sbci	r29, 0xFF	; 255
+  50:	68 81       	ld	r22, Y
+  52:	c1 50       	subi	r28, 0x01	; 1
+  54:	d0 40       	sbci	r29, 0x00	; 0
+  56:	70 e0       	ldi	r23, 0x00	; 0
+  58:	e6 2f       	mov	r30, r22
+  5a:	f7 2f       	mov	r31, r23
+  5c:	02 c0       	rjmp	.+4      	; 0x62 <__stack+0x3>
+  5e:	f5 95       	asr	r31
+  60:	e7 95       	ror	r30
+  62:	4a 95       	dec	r20
+  64:	e2 f7       	brpl	.-8      	; 0x5e <__SREG__+0x1f>
+  66:	e0 fd       	sbrc	r30, 0
+  68:	2a c0       	rjmp	.+84     	; 0xbe <__stack+0x5f>
+	{
+		Pressed_Confidence_Level[buttonNumber]++; //Increase Pressed Conficence
+  6a:	90 e0       	ldi	r25, 0x00	; 0
+  6c:	e8 2f       	mov	r30, r24
+  6e:	f9 2f       	mov	r31, r25
+  70:	ef 5b       	subi	r30, 0xBF	; 191
+  72:	ff 4f       	sbci	r31, 0xFF	; 255
+  74:	40 81       	ld	r20, Z
+  76:	4f 5f       	subi	r20, 0xFF	; 255
+  78:	40 83       	st	Z, r20
+		Released_Confidence_Level[buttonNumber] = 0; //Reset released button confidence since there is a button press
+  7a:	e8 2f       	mov	r30, r24
+  7c:	f9 2f       	mov	r31, r25
+  7e:	e0 5c       	subi	r30, 0xC0	; 192
+  80:	ff 4f       	sbci	r31, 0xFF	; 255
+  82:	10 83       	st	Z, r17
+		if (Pressed_Confidence_Level[buttonNumber] > pressConfidenceLevel) //Indicator of good button press
+  84:	ca 5f       	subi	r28, 0xFA	; 250
+  86:	df 4f       	sbci	r29, 0xFF	; 255
+  88:	58 81       	ld	r21, Y
+  8a:	c6 50       	subi	r28, 0x06	; 6
+  8c:	d0 40       	sbci	r29, 0x00	; 0
+  8e:	54 17       	cp	r21, r20
+  90:	b0 f5       	brcc	.+108    	; 0xfe <__stack+0x9f>
+		{
+			if (Pressed[buttonNumber] == 0)
+  92:	e8 2f       	mov	r30, r24
+  94:	f9 2f       	mov	r31, r25
+  96:	ee 5b       	subi	r30, 0xBE	; 190
+  98:	ff 4f       	sbci	r31, 0xFF	; 255
+  9a:	40 81       	ld	r20, Z
+  9c:	41 13       	cpse	r20, r17
+  9e:	08 c0       	rjmp	.+16     	; 0xb0 <__stack+0x51>
+			{
+				Pressed[buttonNumber] = 1;
+  a0:	e8 2f       	mov	r30, r24
+  a2:	f9 2f       	mov	r31, r25
+  a4:	ee 5b       	subi	r30, 0xBE	; 190
+  a6:	ff 4f       	sbci	r31, 0xFF	; 255
+  a8:	41 e0       	ldi	r20, 0x01	; 1
+  aa:	40 83       	st	Z, r20
+				return 1;
+  ac:	81 e0       	ldi	r24, 0x01	; 1
+  ae:	2a c0       	rjmp	.+84     	; 0x104 <__DATA_REGION_LENGTH__+0x4>
+			}
+			//Zero it so a new pressed condition can be evaluated
+			Pressed_Confidence_Level[buttonNumber] = 0;
+  b0:	e8 2f       	mov	r30, r24
+  b2:	f9 2f       	mov	r31, r25
+  b4:	ef 5b       	subi	r30, 0xBF	; 191
+  b6:	ff 4f       	sbci	r31, 0xFF	; 255
+  b8:	10 83       	st	Z, r17
+		{
+			Pressed[buttonNumber] = 0;
+			Released_Confidence_Level[buttonNumber] = 0;
+		}
+	}
+	return 0;
+  ba:	80 e0       	ldi	r24, 0x00	; 0
+  bc:	23 c0       	rjmp	.+70     	; 0x104 <__DATA_REGION_LENGTH__+0x4>
+			Pressed_Confidence_Level[buttonNumber] = 0;
+		}
+	}
+	else
+	{
+		Released_Confidence_Level[buttonNumber] ++; //This works just like the pressed
+  be:	90 e0       	ldi	r25, 0x00	; 0
+  c0:	e8 2f       	mov	r30, r24
+  c2:	f9 2f       	mov	r31, r25
+  c4:	e0 5c       	subi	r30, 0xC0	; 192
+  c6:	ff 4f       	sbci	r31, 0xFF	; 255
+  c8:	40 81       	ld	r20, Z
+  ca:	4f 5f       	subi	r20, 0xFF	; 255
+  cc:	40 83       	st	Z, r20
+		Pressed_Confidence_Level[buttonNumber] = 0; //Reset pressed button confidence since the button is released
+  ce:	e8 2f       	mov	r30, r24
+  d0:	f9 2f       	mov	r31, r25
+  d2:	ef 5b       	subi	r30, 0xBF	; 191
+  d4:	ff 4f       	sbci	r31, 0xFF	; 255
+  d6:	10 83       	st	Z, r17
+		if (Released_Confidence_Level[buttonNumber] > releaseConfidenceLevel)
+  d8:	c9 5f       	subi	r28, 0xF9	; 249
+  da:	df 4f       	sbci	r29, 0xFF	; 255
+  dc:	58 81       	ld	r21, Y
+  de:	c7 50       	subi	r28, 0x07	; 7
+  e0:	d0 40       	sbci	r29, 0x00	; 0
+  e2:	54 17       	cp	r21, r20
+  e4:	70 f4       	brcc	.+28     	; 0x102 <__DATA_REGION_LENGTH__+0x2>
+		{
+			Pressed[buttonNumber] = 0;
+  e6:	e8 2f       	mov	r30, r24
+  e8:	f9 2f       	mov	r31, r25
+  ea:	ee 5b       	subi	r30, 0xBE	; 190
+  ec:	ff 4f       	sbci	r31, 0xFF	; 255
+  ee:	10 83       	st	Z, r17
+			Released_Confidence_Level[buttonNumber] = 0;
+  f0:	e8 2f       	mov	r30, r24
+  f2:	f9 2f       	mov	r31, r25
+  f4:	e0 5c       	subi	r30, 0xC0	; 192
+  f6:	ff 4f       	sbci	r31, 0xFF	; 255
+  f8:	10 83       	st	Z, r17
+		}
+	}
+	return 0;
+  fa:	80 e0       	ldi	r24, 0x00	; 0
+  fc:	03 c0       	rjmp	.+6      	; 0x104 <__DATA_REGION_LENGTH__+0x4>
+  fe:	80 e0       	ldi	r24, 0x00	; 0
+ 100:	01 c0       	rjmp	.+2      	; 0x104 <__DATA_REGION_LENGTH__+0x4>
+ 102:	80 e0       	ldi	r24, 0x00	; 0
+}
+ 104:	0f 91       	pop	r16
+ 106:	df 91       	pop	r29
+ 108:	cf 91       	pop	r28
+ 10a:	08 95       	ret
+
+0000010c <main>:
+#include "AVR_Button_Debounce.h"
+
+
+int main(void)
+{
+	DDRB |= 0x04;  // Setup PORTB, PIN2 as OUTPUT.
+ 10c:	0a 9a       	sbi	0x01, 2	; 1
+	PORTB |= 0x02; // Setup PORTB, PIN1 as INPUT.
+ 10e:	11 9a       	sbi	0x02, 1	; 2
+	while (1)
+	{
+		
+		if(ButtonPressed(1, PINB, 1, 100, 100) == 1){
+ 110:	60 b1       	in	r22, 0x00	; 0
+ 112:	44 e6       	ldi	r20, 0x64	; 100
+ 114:	4f 93       	push	r20
+ 116:	4f 93       	push	r20
+ 118:	41 e0       	ldi	r20, 0x01	; 1
+ 11a:	81 e0       	ldi	r24, 0x01	; 1
+ 11c:	8d df       	rcall	.-230    	; 0x38 <_Z13ButtonPressedhhhhh>
+ 11e:	0f 91       	pop	r16
+ 120:	0f 91       	pop	r16
+ 122:	81 30       	cpi	r24, 0x01	; 1
+ 124:	a9 f7       	brne	.-22     	; 0x110 <main+0x4>
+			PORTB ^= (1 << PINB2); // Toggles PORTB, PIN2.
+ 126:	52 b1       	in	r21, 0x02	; 2
+ 128:	44 e0       	ldi	r20, 0x04	; 4
+ 12a:	45 27       	eor	r20, r21
+ 12c:	42 b9       	out	0x02, r20	; 2
+ 12e:	f0 cf       	rjmp	.-32     	; 0x110 <main+0x4>
+
+00000130 <_exit>:
+ 130:	f8 94       	cli
+
+00000132 <__stop_program>:
+ 132:	ff cf       	rjmp	.-2      	; 0x132 <__stop_program>
