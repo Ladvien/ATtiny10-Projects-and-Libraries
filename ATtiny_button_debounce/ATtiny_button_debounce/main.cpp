@@ -16,9 +16,8 @@ int main(void)
 	DDRB |= 0x04;  // Setup PORTB, PIN2 as OUTPUT.
 	PORTB |= 0x02; // Setup PORTB, PIN1 as INPUT.
 	while (1)
-	{
-		
-		if(ButtonPressed(1, PINB, 1, 100, 100) == 1){
+	{	
+		if(ButtonPressed(1, PINB, 1, 10, 10) == 1){
 			PORTB ^= (1 << PINB2); // Toggles PORTB, PIN2.
 		} 
 

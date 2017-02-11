@@ -1,33 +1,33 @@
 
-ATtiny_button_debounce.elf:     file format elf32-avr
+State_Controller.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .text         00000134  00000000  00000000  00000074  2**1
+  0 .text         000001a4  00000000  00000000  00000074  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  1 .data         00000000  00800040  00800040  000001a8  2**0
+  1 .data         00000000  00800040  00800040  00000218  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  2 .bss          00000003  00800040  00800040  000001a8  2**0
+  2 .bss          00000005  00800040  00800040  00000218  2**0
                   ALLOC
-  3 .comment      00000030  00000000  00000000  000001a8  2**0
+  3 .comment      00000030  00000000  00000000  00000218  2**0
                   CONTENTS, READONLY
-  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  000001d8  2**2
+  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000248  2**2
                   CONTENTS, READONLY
-  5 .debug_aranges 00000028  00000000  00000000  00000214  2**0
+  5 .debug_aranges 00000030  00000000  00000000  00000284  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   0000047f  00000000  00000000  0000023c  2**0
+  6 .debug_info   000004db  00000000  00000000  000002b4  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 000003a1  00000000  00000000  000006bb  2**0
+  7 .debug_abbrev 000003c7  00000000  00000000  0000078f  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   00000219  00000000  00000000  00000a5c  2**0
+  8 .debug_line   000002a1  00000000  00000000  00000b56  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  00000050  00000000  00000000  00000c78  2**2
+  9 .debug_frame  00000060  00000000  00000000  00000df8  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    00000381  00000000  00000000  00000cc8  2**0
+ 10 .debug_str    00000393  00000000  00000000  00000e58  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    0000018d  00000000  00000000  00001049  2**0
+ 11 .debug_loc    0000018d  00000000  00000000  000011eb  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 00000018  00000000  00000000  000011d6  2**0
+ 12 .debug_ranges 00000020  00000000  00000000  00001378  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -63,11 +63,11 @@ Disassembly of section .text:
   2a:	1d 93       	st	X+, r17
 
 0000002c <.do_clear_bss_start>:
-  2c:	a3 34       	cpi	r26, 0x43	; 67
+  2c:	a5 34       	cpi	r26, 0x45	; 69
   2e:	b2 07       	cpc	r27, r18
   30:	e1 f7       	brne	.-8      	; 0x2a <.do_clear_bss_loop>
-  32:	6c d0       	rcall	.+216    	; 0x10c <main>
-  34:	7d c0       	rjmp	.+250    	; 0x130 <_exit>
+  32:	6f d0       	rcall	.+222    	; 0x112 <main>
+  34:	b5 c0       	rjmp	.+362    	; 0x1a0 <_exit>
 
 00000036 <__bad_interrupt>:
   36:	e4 cf       	rjmp	.-56     	; 0x0 <__vectors>
@@ -110,7 +110,7 @@ char ButtonPressed(uint8_t buttonNumber, unsigned char pinOfButton, unsigned cha
   6a:	90 e0       	ldi	r25, 0x00	; 0
   6c:	e8 2f       	mov	r30, r24
   6e:	f9 2f       	mov	r31, r25
-  70:	ef 5b       	subi	r30, 0xBF	; 191
+  70:	ed 5b       	subi	r30, 0xBD	; 189
   72:	ff 4f       	sbci	r31, 0xFF	; 255
   74:	40 81       	ld	r20, Z
   76:	4f 5f       	subi	r20, 0xFF	; 255
@@ -118,7 +118,7 @@ char ButtonPressed(uint8_t buttonNumber, unsigned char pinOfButton, unsigned cha
 		Released_Confidence_Level[buttonNumber] = 0; //Reset released button confidence since there is a button press
   7a:	e8 2f       	mov	r30, r24
   7c:	f9 2f       	mov	r31, r25
-  7e:	e0 5c       	subi	r30, 0xC0	; 192
+  7e:	ee 5b       	subi	r30, 0xBE	; 190
   80:	ff 4f       	sbci	r31, 0xFF	; 255
   82:	10 83       	st	Z, r17
 		if (Pressed_Confidence_Level[buttonNumber] > pressConfidenceLevel) //Indicator of good button press
@@ -133,7 +133,7 @@ char ButtonPressed(uint8_t buttonNumber, unsigned char pinOfButton, unsigned cha
 			if (Pressed[buttonNumber] == 0)
   92:	e8 2f       	mov	r30, r24
   94:	f9 2f       	mov	r31, r25
-  96:	ee 5b       	subi	r30, 0xBE	; 190
+  96:	ec 5b       	subi	r30, 0xBC	; 188
   98:	ff 4f       	sbci	r31, 0xFF	; 255
   9a:	40 81       	ld	r20, Z
   9c:	41 13       	cpse	r20, r17
@@ -142,7 +142,7 @@ char ButtonPressed(uint8_t buttonNumber, unsigned char pinOfButton, unsigned cha
 				Pressed[buttonNumber] = 1;
   a0:	e8 2f       	mov	r30, r24
   a2:	f9 2f       	mov	r31, r25
-  a4:	ee 5b       	subi	r30, 0xBE	; 190
+  a4:	ec 5b       	subi	r30, 0xBC	; 188
   a6:	ff 4f       	sbci	r31, 0xFF	; 255
   a8:	41 e0       	ldi	r20, 0x01	; 1
   aa:	40 83       	st	Z, r20
@@ -154,7 +154,7 @@ char ButtonPressed(uint8_t buttonNumber, unsigned char pinOfButton, unsigned cha
 			Pressed_Confidence_Level[buttonNumber] = 0;
   b0:	e8 2f       	mov	r30, r24
   b2:	f9 2f       	mov	r31, r25
-  b4:	ef 5b       	subi	r30, 0xBF	; 191
+  b4:	ed 5b       	subi	r30, 0xBD	; 189
   b6:	ff 4f       	sbci	r31, 0xFF	; 255
   b8:	10 83       	st	Z, r17
 		{
@@ -174,7 +174,7 @@ char ButtonPressed(uint8_t buttonNumber, unsigned char pinOfButton, unsigned cha
   be:	90 e0       	ldi	r25, 0x00	; 0
   c0:	e8 2f       	mov	r30, r24
   c2:	f9 2f       	mov	r31, r25
-  c4:	e0 5c       	subi	r30, 0xC0	; 192
+  c4:	ee 5b       	subi	r30, 0xBE	; 190
   c6:	ff 4f       	sbci	r31, 0xFF	; 255
   c8:	40 81       	ld	r20, Z
   ca:	4f 5f       	subi	r20, 0xFF	; 255
@@ -182,7 +182,7 @@ char ButtonPressed(uint8_t buttonNumber, unsigned char pinOfButton, unsigned cha
 		Pressed_Confidence_Level[buttonNumber] = 0; //Reset pressed button confidence since the button is released
   ce:	e8 2f       	mov	r30, r24
   d0:	f9 2f       	mov	r31, r25
-  d2:	ef 5b       	subi	r30, 0xBF	; 191
+  d2:	ed 5b       	subi	r30, 0xBD	; 189
   d4:	ff 4f       	sbci	r31, 0xFF	; 255
   d6:	10 83       	st	Z, r17
 		if (Released_Confidence_Level[buttonNumber] > releaseConfidenceLevel)
@@ -197,13 +197,13 @@ char ButtonPressed(uint8_t buttonNumber, unsigned char pinOfButton, unsigned cha
 			Pressed[buttonNumber] = 0;
   e6:	e8 2f       	mov	r30, r24
   e8:	f9 2f       	mov	r31, r25
-  ea:	ee 5b       	subi	r30, 0xBE	; 190
+  ea:	ec 5b       	subi	r30, 0xBC	; 188
   ec:	ff 4f       	sbci	r31, 0xFF	; 255
   ee:	10 83       	st	Z, r17
 			Released_Confidence_Level[buttonNumber] = 0;
   f0:	e8 2f       	mov	r30, r24
   f2:	f9 2f       	mov	r31, r25
-  f4:	e0 5c       	subi	r30, 0xC0	; 192
+  f4:	ee 5b       	subi	r30, 0xBE	; 190
   f6:	ff 4f       	sbci	r31, 0xFF	; 255
   f8:	10 83       	st	Z, r17
 		}
@@ -220,39 +220,137 @@ char ButtonPressed(uint8_t buttonNumber, unsigned char pinOfButton, unsigned cha
  108:	cf 91       	pop	r28
  10a:	08 95       	ret
 
-0000010c <main>:
-#include "AVR_Button_Debounce.h"
+0000010c <_Z9clearPinsv>:
+		}
+    }
+}
 
+void clearPins(){
+	PORTB &=~ (1 << PINB2); // Toggles PORTB, PIN2.
+ 10c:	12 98       	cbi	0x02, 2	; 2
+	PORTB &=~ (1 << PINB0); // Toggles PORTB, PIN2.
+ 10e:	10 98       	cbi	0x02, 0	; 2
+ 110:	08 95       	ret
+
+00000112 <main>:
+void clearPins();
 
 int main(void)
 {
-	DDRB |= 0x04;  // Setup PORTB, PIN2 as OUTPUT.
- 10c:	0a 9a       	sbi	0x01, 2	; 1
-	PORTB |= 0x02; // Setup PORTB, PIN1 as INPUT.
- 10e:	11 9a       	sbi	0x02, 1	; 2
-	while (1)
-	{	
-		if(ButtonPressed(1, PINB, 1, 10, 10) == 1){
- 110:	60 b1       	in	r22, 0x00	; 0
- 112:	4a e0       	ldi	r20, 0x0A	; 10
- 114:	4f 93       	push	r20
- 116:	4f 93       	push	r20
- 118:	41 e0       	ldi	r20, 0x01	; 1
- 11a:	81 e0       	ldi	r24, 0x01	; 1
- 11c:	8d df       	rcall	.-230    	; 0x38 <_Z13ButtonPressedhhhhh>
- 11e:	0f 91       	pop	r16
- 120:	0f 91       	pop	r16
- 122:	81 30       	cpi	r24, 0x01	; 1
- 124:	a9 f7       	brne	.-22     	; 0x110 <main+0x4>
-			PORTB ^= (1 << PINB2); // Toggles PORTB, PIN2.
- 126:	52 b1       	in	r21, 0x02	; 2
- 128:	44 e0       	ldi	r20, 0x04	; 4
- 12a:	45 27       	eor	r20, r21
- 12c:	42 b9       	out	0x02, r20	; 2
- 12e:	f0 cf       	rjmp	.-32     	; 0x110 <main+0x4>
 
-00000130 <_exit>:
- 130:	f8 94       	cli
+	DDRB |= 0b00000101;  // Setup PORTB, PIN2 as OUTPUT.
+ 112:	41 b1       	in	r20, 0x01	; 1
+ 114:	45 60       	ori	r20, 0x05	; 5
+ 116:	41 b9       	out	0x01, r20	; 1
+	//PORTB |= 0x02; // Setup PORTB, PIN1 as INPUT.
 
-00000132 <__stop_program>:
- 132:	ff cf       	rjmp	.-2      	; 0x132 <__stop_program>
+    /* Replace with your application code */
+    while (1) 
+    {
+		if(ButtonPressed(1, PINB, 1, 300, 300) == 1){
+ 118:	60 b1       	in	r22, 0x00	; 0
+ 11a:	4c e2       	ldi	r20, 0x2C	; 44
+ 11c:	4f 93       	push	r20
+ 11e:	4f 93       	push	r20
+ 120:	41 e0       	ldi	r20, 0x01	; 1
+ 122:	81 e0       	ldi	r24, 0x01	; 1
+ 124:	89 df       	rcall	.-238    	; 0x38 <_Z13ButtonPressedhhhhh>
+ 126:	0f 91       	pop	r16
+ 128:	0f 91       	pop	r16
+ 12a:	81 30       	cpi	r24, 0x01	; 1
+ 12c:	a9 f4       	brne	.+42     	; 0x158 <main+0x46>
+			state++;
+ 12e:	e0 e4       	ldi	r30, 0x40	; 64
+ 130:	f0 e0       	ldi	r31, 0x00	; 0
+ 132:	40 81       	ld	r20, Z
+ 134:	ef 5f       	subi	r30, 0xFF	; 255
+ 136:	ff 4f       	sbci	r31, 0xFF	; 255
+ 138:	50 81       	ld	r21, Z
+ 13a:	e1 50       	subi	r30, 0x01	; 1
+ 13c:	f0 40       	sbci	r31, 0x00	; 0
+ 13e:	4f 5f       	subi	r20, 0xFF	; 255
+ 140:	5f 4f       	sbci	r21, 0xFF	; 255
+			if(state > 3) { state = 0; }
+ 142:	44 30       	cpi	r20, 0x04	; 4
+ 144:	51 07       	cpc	r21, r17
+ 146:	1c f4       	brge	.+6      	; 0x14e <main+0x3c>
+
+    /* Replace with your application code */
+    while (1) 
+    {
+		if(ButtonPressed(1, PINB, 1, 300, 300) == 1){
+			state++;
+ 148:	41 93       	st	Z+, r20
+ 14a:	50 83       	st	Z, r21
+ 14c:	05 c0       	rjmp	.+10     	; 0x158 <main+0x46>
+			if(state > 3) { state = 0; }
+ 14e:	e0 e4       	ldi	r30, 0x40	; 64
+ 150:	f0 e0       	ldi	r31, 0x00	; 0
+ 152:	11 93       	st	Z+, r17
+ 154:	10 83       	st	Z, r17
+ 156:	16 c0       	rjmp	.+44     	; 0x184 <main+0x72>
+			//PORTB ^= (1 << PINB2); // Toggles PORTB, PIN2.
+		}
+		
+		switch(state){			
+ 158:	e0 e4       	ldi	r30, 0x40	; 64
+ 15a:	f0 e0       	ldi	r31, 0x00	; 0
+ 15c:	40 81       	ld	r20, Z
+ 15e:	ef 5f       	subi	r30, 0xFF	; 255
+ 160:	ff 4f       	sbci	r31, 0xFF	; 255
+ 162:	50 81       	ld	r21, Z
+ 164:	e1 50       	subi	r30, 0x01	; 1
+ 166:	f0 40       	sbci	r31, 0x00	; 0
+ 168:	41 30       	cpi	r20, 0x01	; 1
+ 16a:	51 07       	cpc	r21, r17
+ 16c:	71 f0       	breq	.+28     	; 0x18a <main+0x78>
+ 16e:	1c f4       	brge	.+6      	; 0x176 <main+0x64>
+ 170:	45 2b       	or	r20, r21
+ 172:	a1 f4       	brne	.+40     	; 0x19c <main+0x8a>
+ 174:	07 c0       	rjmp	.+14     	; 0x184 <main+0x72>
+ 176:	42 30       	cpi	r20, 0x02	; 2
+ 178:	51 07       	cpc	r21, r17
+ 17a:	51 f0       	breq	.+20     	; 0x190 <main+0x7e>
+ 17c:	43 30       	cpi	r20, 0x03	; 3
+ 17e:	51 07       	cpc	r21, r17
+ 180:	59 f0       	breq	.+22     	; 0x198 <main+0x86>
+ 182:	0c c0       	rjmp	.+24     	; 0x19c <main+0x8a>
+			case 0:
+				clearPins();
+ 184:	c3 df       	rcall	.-122    	; 0x10c <_Z9clearPinsv>
+				PORTB |= (1 << PINB2); // Toggles PORTB, PIN2.
+ 186:	12 9a       	sbi	0x02, 2	; 2
+				break;
+ 188:	c7 cf       	rjmp	.-114    	; 0x118 <main+0x6>
+			case 1:
+				clearPins();
+ 18a:	c0 df       	rcall	.-128    	; 0x10c <_Z9clearPinsv>
+				PORTB |= (1 << PINB0); // Toggles PORTB, PIN0.
+ 18c:	10 9a       	sbi	0x02, 0	; 2
+				break;
+ 18e:	c4 cf       	rjmp	.-120    	; 0x118 <main+0x6>
+			case 2:
+				clearPins();
+ 190:	bd df       	rcall	.-134    	; 0x10c <_Z9clearPinsv>
+				PORTB |= (1 << PINB2); // Toggles PORTB, PIN2.
+ 192:	12 9a       	sbi	0x02, 2	; 2
+				PORTB |= (1 << PINB0); // Toggles PORTB, PIN0.				
+ 194:	10 9a       	sbi	0x02, 0	; 2
+				break;
+ 196:	c0 cf       	rjmp	.-128    	; 0x118 <main+0x6>
+			case 3:
+				clearPins();
+ 198:	b9 df       	rcall	.-142    	; 0x10c <_Z9clearPinsv>
+				break;
+ 19a:	be cf       	rjmp	.-132    	; 0x118 <main+0x6>
+			default:
+				clearPins();
+ 19c:	b7 df       	rcall	.-146    	; 0x10c <_Z9clearPinsv>
+				break;
+ 19e:	bc cf       	rjmp	.-136    	; 0x118 <main+0x6>
+
+000001a0 <_exit>:
+ 1a0:	f8 94       	cli
+
+000001a2 <__stop_program>:
+ 1a2:	ff cf       	rjmp	.-2      	; 0x1a2 <__stop_program>
